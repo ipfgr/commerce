@@ -1,0 +1,69 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}Auctions{% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
+    </head>
+    <body>
+        
+        {% comment %} <div>
+            {% if user.is_authenticated %}
+                Signed in as <strong>{{ user.username }}</strong>.
+            {% else %}
+                Not signed in.
+            {% endif %}
+        </div> {% endcomment %}
+
+
+        <nav class="navbar navbar-light " style="background-color: #e3f2fd;">
+        <a class="navbar-brand" href="#">Auctions</a>
+        <ul class="nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'categories' %}">Categoties</a>
+            </li>
+            {% if user.is_authenticated %}
+                 
+                 <li class="nav-item">
+                    <a class="nav-link" href="{% url 'watchlist' %}">Watchlist Items</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'add' %}">Create Listing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                </li>
+            {% endif %}
+        </ul>
+
+         <div class="navbar-text">
+            {% if user.is_authenticated %}
+                Signed in as <strong>{{ user.username }}</strong>.
+            {% else %}
+                Not signed in.
+            {% endif %}
+        </div>
+        </nav>
+        <hr>
+        {% block body %}
+        {% endblock %}
+    </body>
+    <script>
+    $(document).ready(function(){
+     $('.toast').toast('show');
+      });
+    </script>
+    <script src="{% static 'encyclopedia/util.js' %}">
+</html>

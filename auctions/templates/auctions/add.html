@@ -1,0 +1,73 @@
+{% extends 'auctions/layout.html' %} {% block body %}
+
+<div class="container maincontainer">
+<br>
+  <h2 class="text-primary text-center">Add new product</h2>
+
+  <form action="add" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label>Title</label>
+      <input
+        type="text"
+        class="form-control"
+        name="title"
+        placeholder="Title"
+      />
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <textarea class="form-control" name="description" rows="8" placeholder="Enter product description here"></textarea>
+    </div>
+
+    <label>Starting bid</label>
+    <div class="input-group price">
+      <span class="input-group-text">$</span>
+      <input
+        type="number"
+        name="startbid"
+        class="form-control"
+        aria-label="Amount (to the nearest dollar)"
+        placeholder="Enter start bid (USD)"
+      />
+    </div>
+    <br />
+    <div class="form-group">
+      <label>Add image url</label>
+      <input
+        type="text"
+        class="form-control"
+        name="imgurl"
+        placeholder="image url here"
+      />
+    </div>
+
+    <br />
+    <div class="form-group">
+      <label>Select Categories</label>
+      <select class="form-control" name="category">
+        <option>Toys</option>
+        <option>Electronic</option>
+        <option>Fashion</option>
+        <option>Home</option>
+      </select>
+    </div>
+
+     <div class="form-group">
+        <label for="emailinput">Email address</label>
+        <input type="email" id="emailinput" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Enter email">
+        <small id="emailHelp" class="form-text text-muted">Enter email adress for contcat.</small>
+  </div>
+
+    <input class="btn btn-primary" type="submit" value="Create" />
+    
+  </form>
+  <br>
+  {%if name %}
+  
+    <div class="">Sorry, product with name <strong>{{name}}</strong> already exist</div>
+    <br>  
+  {%endif%}
+</div>
+
+{% endblock %}
