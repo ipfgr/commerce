@@ -29,6 +29,7 @@
         class="form-control"
         aria-label="Amount (to the nearest dollar)"
         placeholder="Enter start bid (USD)"
+        min="1"
       />
     </div>
     <br />
@@ -46,10 +47,9 @@
     <div class="form-group">
       <label>Select Categories</label>
       <select class="form-control" name="category">
-        <option>Toys</option>
-        <option>Electronic</option>
-        <option>Fashion</option>
-        <option>Home</option>
+        {%for category in categories%}
+        <option>{{category}}</option>
+        {%endfor%}
       </select>
     </div>
 
@@ -58,7 +58,11 @@
         <input type="email" id="emailinput" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Enter email">
         <small id="emailHelp" class="form-text text-muted">Enter email adress for contcat.</small>
   </div>
-
+     <input
+        type="hidden"
+        name="author"
+        value={{user.username}}
+              />
     <input class="btn btn-primary" type="submit" value="Create" />
     
   </form>

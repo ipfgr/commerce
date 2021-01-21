@@ -1,17 +1,37 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
+
 
 
 class User(AbstractUser):
     pass
 
+
+class Category(models.Model):
+    
+    class Meta:
+        verbose_name_plural = "categories"
+
+    id = models.AutoField(primary_key=True)
+    categories=models.CharField(max_length=64, default="None")
+
+
+    def __str__(self):
+        return self.categories
+
+class WatchList(models.Model):
+    pass
+    
+
 class Product(models.Model):
     auto_increment_id = models.AutoField(primary_key=True)
+    author=models.CharField(max_length=100,default="unknow")
     title= models.CharField(max_length=64)
     description= models.TextField()
     startbid= models.PositiveIntegerField(null=True, blank=True)
     imgurl= models.CharField(max_length=200)
-    category= models.CharField(max_length=32)
+    category= models.ForeignKey(Category, on_delete=models.CASCADE, related_name="ctg", default="None")
     active = models.BooleanField()
     email= models.EmailField(max_length=128,null=True)
 
@@ -19,15 +39,15 @@ class Product(models.Model):
         return self.title
 
 class Comment(models.Model):
-    comment_autor = models.CharField(max_length=64)
-    comment_text = models.TextField()
-    post_date= models.DateTimeField() 
-     
-    def __str__(self):
-        return self.comment_autor 
+    title = models.ForeignKey(Product,on_delete=models.CASCADE,related_name='commenttext',null=True)
+    comment_text = models.TextField(max_length=392)
+    post_date= models.DateTimeField(default=timezone.now()) 
 
-class Bids(models.Model):
-    current_bid= models.ForeignKey(Product, on_delete=models.CASCADE, related_name="currentbid")
+    class Meta:
+        ordering = ["post_date"]
 
     def __str__(self):
-        return self.current_bid
+        return "Comment \"{}\" of product \'{}'".format(self.comment_text, self.title)
+
+
+

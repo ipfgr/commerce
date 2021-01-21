@@ -1,0 +1,43 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+
+<div class="container">
+  <h2 class="text-center">Sorted by category: {{category_name}}</h2>
+  <br />
+  <div class="row">
+    {% if filtered_products %} 
+        {%for fp in filtered_products %}
+    
+        <div class="col-md-3 col-sm-6">
+        <div class="product-grid7">
+            <div class="product-image7">
+            <a href="product/{{fp.title}}">
+                <img class="pic-1" src="{{fp.imgurl}}" />
+            </a>
+            <ul class="social">
+                <li><a href="" class="fa fa-shopping-bag"></a></li>
+            </ul>
+            <span class="product-new-label">New</span>
+            </div>
+            <div class="product-content">
+            <h3 class="title"><a href="#">{{fp.title}}</a></h3>
+            <ul class="rating">
+                <li class="fa fa-star"></li>
+                <li class="fa fa-star"></li>
+                <li class="fa fa-star"></li>
+                <li class="fa fa-star"></li>
+                <li class="fa fa-star"></li>
+            </ul>
+            <div class="price">${{fp.startbid}}</div>
+            </div>
+        </div>
+        </div>
+        {%endfor%} {% else %}
+    <p>Not have any active listings.</p>
+    {%endif%}
+  </div>
+</div>
+<hr />
+
+{% endblock %}

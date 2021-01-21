@@ -1,11 +1,55 @@
 {% extends "auctions/layout.html" %}
+{% comment %} {%block categories%}
+ <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle"  id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Categories
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                {%for c in categories_list %}
+                     <a href="#" class="dropdown-item">{{c.categories}}</a>
+                {%endfor%}
+                </div>
+            </li>
+{%endblock%} {% endcomment %}
 
 {% block body %}
-    <h2>Active Listings</h2>
-    <ul>
-    {%for i in items%}
-    <li>{{ i }}</li>
-    {%endfor%}
-    </ul>
+
+<div class="container">
+  <h2 class="text-center">Active Listings</h2>
+  <br />
+  <div class="row">
+    {% if items %} 
+        {%for i in items %}
+    
+        <div class="col-md-3 col-sm-6">
+        <div class="product-grid7">
+            <div class="product-image7">
+            <a href="product/{{i.title}}">
+                <img class="pic-1" src="{{i.imgurl}}" />
+            </a>
+            <ul class="social">
+                <li><a href="" class="fa fa-shopping-bag"></a></li>
+            </ul>
+            <span class="product-new-label">New</span>
+            </div>
+            <div class="product-content">
+            <h3 class="title"><a href="#">{{i.title}}</a></h3>
+            <ul class="rating">
+                <li class="fa fa-star"></li>
+                <li class="fa fa-star"></li>
+                <li class="fa fa-star"></li>
+                <li class="fa fa-star"></li>
+                <li class="fa fa-star"></li>
+            </ul>
+            <div class="price">${{i.startbid}}</div>
+            </div>
+        </div>
+        </div>
+        {%endfor%} {% else %}
+    <p>Not have any active listings.</p>
+    {%endif%}
+  </div>
+</div>
+<hr />
 
 {% endblock %}

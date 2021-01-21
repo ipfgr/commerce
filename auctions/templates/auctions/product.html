@@ -1,7 +1,6 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
 <div class="col-sm-12 col-md-12 col-lg-12">
     <!-- product -->
     <div class="product-content product-wrap clearfix product-deatil">
@@ -25,13 +24,13 @@
                 </h2>
                 <hr />
                 <h3 class="price-container">
-                    ${{strbid}}
+                   <span>Current bid:</span> ${{strbid}}
                     <small>*includes tax</small>
                 </h3>
-                <div class="certified">
+                <div>
                     <ul>
                         <li>
-                            <h4>Delivery time<span> 7 Working Days</span></h4>
+                            </h5>Category: <span>{{category}}</span></h5>
                         </li>
                         
                     </ul>
@@ -58,7 +57,6 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-6 col-lg-6" >
                     <div class="input-group">
-      <span class="input-group-text">$</span>
       <form action="" method="post">
       <input
         type="number"
@@ -66,6 +64,7 @@
         class="price"
         aria-label="Amount (to the nearest dollar)"
         placeholder="Enter start bid (USD)"
+        min="1"
       />
       <input
         type="hidden"
@@ -76,9 +75,16 @@
         name="title" value = {{title}}
       />
     {%csrf_token%}
-        <button type="submit" class="btn btn-success btn-lg">Place new Bid</button>
+    
+        
 
-      </form>
+    <button type="submit" class="btn btn-success btn-lg">Place new Bid</button>
+    {% if close_button%}
+    <button type="submit" class="btn btn-info btn-lg" name="end" value="close_bid">Close Listen</button>
+    {%endif%}
+    </form>
+      
+      
     </div>
                         
                     </div>
@@ -96,6 +102,40 @@
                 {%if error%}
                     <div class="alert alert-danger" role="alert"> <h5>{{error}}</h5></div>
                 {%endif%}
+                <br>
+               
+
+                	<h5 >Add New Comment</h5>
+                    <hr>
+                <form>
+                	<button type="submit" class="btn btn-normal pull-right">Submit</button>
+                    <fieldset>
+                        <div class="row">
+                            <div class="form-group col-xs-12 col-sm-9 col-lg-10">
+                                <textarea class="form-control" name="newcomment" id="comment" placeholder="Your comment" required=""></textarea>
+                            </div>
+                        </div>  	
+                    </fieldset>
+                </form>
+                
+                <h3>Last 5 comments</h3>
+                
+
+                {% comment %} Comments section  {% endcomment %}
+                {%for comment in comment_obj %}
+                <div class="media">
+                    <div class="media-body">
+                        <p>{{comment.comment_text}}</p>
+                        <ul class="list-unstyled list-inline media-detail pull-left">
+                            <li><i class="fa fa-calendar"></i> {{comment.post_date}}</li>
+                        </ul>
+                    </div>
+                </div>
+                {%endfor%}
+                {% comment %} Comments section  {% endcomment %}
+
+
+
             </div>
         </div>
     </div>
