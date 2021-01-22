@@ -6,8 +6,6 @@ from django.utils import timezone
 
 class User(AbstractUser):
     pass
-
-
 class Category(models.Model):
     
     class Meta:
@@ -19,9 +17,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.categories
-
-class WatchList(models.Model):
-    pass
     
 
 class Product(models.Model):
@@ -34,12 +29,13 @@ class Product(models.Model):
     category= models.ForeignKey(Category, on_delete=models.CASCADE, related_name="ctg", default="None")
     active = models.BooleanField()
     email= models.EmailField(max_length=128,null=True)
+    winner= models.CharField(max_length=100, default="Not yet have Winner")
 
     def __str__(self):
         return self.title
 
 class Comment(models.Model):
-    title = models.ForeignKey(Product,on_delete=models.CASCADE,related_name='commenttext',null=True)
+    title = models.ForeignKey(Product,on_delete=models.CASCADE ,related_name='commenttext',null=True)
     comment_text = models.TextField(max_length=392)
     post_date= models.DateTimeField(default=timezone.now()) 
 
@@ -49,5 +45,22 @@ class Comment(models.Model):
     def __str__(self):
         return "Comment \"{}\" of product \'{}'".format(self.comment_text, self.title)
 
+class Bid(models.Model):
+
+    user = models.CharField(max_length=100,default="unknow")
+    product = models.ForeignKey(Product, on_delete =models.CASCADE, related_name="name_for_product_biddet")
+    bid = models.PositiveIntegerField(null=True, blank= True)
+    bid_date = models.DateTimeField(default=timezone.now())
 
 
+    def __str__(self):
+        return "\"{}\" place bid \'{}' for product \'{}'".format(self.user, self.bid, self.product)
+
+
+class WatchListForUser(models.Model):
+    user = models.CharField(max_length=100, default="unknow")
+    watchlist= models.CharField(max_length=100, default="None")
+
+
+    def __str__(self):
+        return "Watchlist for user {}".format(self.user)

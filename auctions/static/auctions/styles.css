@@ -1,5 +1,6 @@
 body {
   padding: 10px;
+  border: 12px solid rgb(227 242 253);
 }
 
 .maincontainer {
@@ -8,7 +9,7 @@ body {
   box-shadow: 0px 0px 50px 3px #d0d0d0;
 }
 .price {
-  max-width: 20%;
+  max-width: 25%;
   margin: 0 10px 0px 0px;
 }
 

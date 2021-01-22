@@ -2,73 +2,76 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>{% block title %}Auctions{% endblock %}</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    </head>
-    <body>
-        
-        {% comment %} <div>
-            {% if user.is_authenticated %}
-                Signed in as <strong>{{ user.username }}</strong>.
-            {% else %}
-                Not signed in.
-            {% endif %}
-        </div> {% endcomment %}
+  <head>
+    <title>{% block title %}Auctions{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link href="{% static 'auctions/styles.css' %}" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Open+Sans"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+  </head>
+  <body>
+    <nav class="navbar navbar-light" style="background-color: #e3f2fd">
+      <a class="navbar-brand">Auctions</a>
+      <ul class="nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+        </li>
+        {%block categories %} {%endblock %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'categories' %}">Categoties</a>
+        </li>
+        {% if user.is_authenticated %}
 
-        <nav class="navbar navbar-light " style="background-color: #e3f2fd;">
-        <a class="navbar-brand" href="#">Auctions</a>
-        <ul class="nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
-            </li>
-           {%block categories %}
-           {%endblock %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'categories' %}">Categoties</a>
-            </li>
-            {% if user.is_authenticated %}
-                 
-                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'watchlist' %}">Watchlist Items</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'add' %}">Create Listing</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Log In</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}">Register</a>
-                </li>
-            {% endif %}
-        </ul>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'watchlist' %}">Watchlist Items</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'add' %}">Create Listing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'login' %}">Log In</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'register' %}">Register</a>
+        </li>
+        {% endif %}
+      </ul>
 
-         <div class="navbar-text">
-            {% if user.is_authenticated %}
-                Signed in as <strong>{{ user.username }}</strong>.
-            {% else %}
-                Not signed in.
-            {% endif %}
-        </div>
-        </nav>
-        <hr>
-        {% block body %}
-        {% endblock %}
-    </body>
-    <script>
-    $(document).ready(function(){
-     $('.toast').toast('show');
-      });
-    </script>
-    <script src="{% static 'encyclopedia/util.js' %}">
+      <div class="navbar-text">
+        {% if user.is_authenticated %} Signed in as
+        <strong>{{ user.username }}</strong>. {% else %} Not signed in. 
+        {% endif%}
+      </div>
+    </nav>
+    <hr />
+    {% block body %} {% endblock %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    
+  </body>
+  <footer>
+    <!-- Copyright -->
+  <div class="text-center p-3" style="background-color: #e3f2fd">
+    © 2021 Copyright:
+    <a class="text-dark" href="#">Coded by Ipfgr</a>
+  </div>
+  <!-- Copyright -->
+</footer>
+  </footer>
 </html>

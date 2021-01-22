@@ -13,11 +13,12 @@
         class="form-control"
         name="title"
         placeholder="Title"
+        required
       />
     </div>
     <div class="form-group">
       <label>Description</label>
-      <textarea class="form-control" name="description" rows="8" placeholder="Enter product description here"></textarea>
+      <textarea class="form-control" name="description" rows="8" placeholder="Enter product description here" required></textarea>
     </div>
 
     <label>Starting bid</label>
@@ -73,5 +74,5 @@
     <br>  
   {%endif%}
 </div>
-
+<br>
 {% endblock %}

@@ -33,7 +33,8 @@
             <span class="product-new-label">New</span>
             </div>
             <div class="product-content">
-            <h3 class="title"><a href="#">{{i.title}}</a></h3>
+            <h3 class="title"><a href="product/{{i.title}}">{{i.title}}</a></h3>
+            <h5 class="title"><a href="product/{{i.title}}">{{i.description|slice:":60"}}...</a></h5>
             <ul class="rating">
                 <li class="fa fa-star"></li>
                 <li class="fa fa-star"></li>
@@ -42,6 +43,7 @@
                 <li class="fa fa-star"></li>
             </ul>
             <div class="price">${{i.startbid}}</div>
+            
             </div>
         </div>
         </div>

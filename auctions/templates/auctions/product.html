@@ -1,4 +1,5 @@
 {% extends "auctions/layout.html" %}
+{% load static %}
 
 {% block body %}
 <div class="col-sm-12 col-md-12 col-lg-12">
@@ -12,7 +13,11 @@
                         <div class="carousel-inner">
                             <!-- Slide 1 -->
                             <div class="item active">
-                                <img src="{{imgurl}}" class="img-responsive" alt="" />
+                            {%if imgurl%}
+                            <img src="{{imgurl}}" class="img-responsive" alt="" />
+                            {%else%}
+                            <img src={% static 'auctions/no_image.png' %} class="img-responsive" alt="" />
+                            {%endif%}
                             </div>
                         </div>
                        </div>
@@ -23,10 +28,15 @@
                     {{title}}
                 </h2>
                 <hr />
-                <h3 class="price-container">
-                   <span>Current bid:</span> ${{strbid}}
-                    <small>*includes tax</small>
-                </h3>
+               
+                <div class="price-container">
+                   <h5>Starting price: ${{strbid}}</h5>   
+                {%if current_bid > 0 %}
+                    <h3>Current bid: ${{current_bid}}</h3> 
+                {%else%}
+                    <h6>Nobody place bid yet</h6> 
+                {%endif%}
+                </div>
                 <div>
                     <ul>
                         <li>
@@ -63,7 +73,7 @@
         name="updbid"
         class="price"
         aria-label="Amount (to the nearest dollar)"
-        placeholder="Enter start bid (USD)"
+        placeholder="Yor bid"
         min="1"
       />
       <input

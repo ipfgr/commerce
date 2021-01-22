@@ -7,6 +7,7 @@ from .models import Product
 from .models import User
 from .models import Comment
 from .models import Category
+from .models import Bid
 from datetime import datetime
 from .forms import CommentsForm
 
@@ -22,103 +23,127 @@ def index(request):
     )
 
 
-
-#return page shows listings in choosen category   
-def category(request,ident):
+# return page shows listings in choosen category
+def category(request, ident):
     categ_id = Category.objects.filter(categories=str(ident))
     filtered_products = Product.objects.filter(category_id=categ_id[0])
-    return render(request, "auctions/category.html", {
-            "filtered_products":filtered_products,
-            "category_name": ident
-        })
+    return render(
+        request,
+        "auctions/category.html",
+        {"filtered_products": filtered_products, "category_name": ident},
+    )
 
 
-#show choosen product
+# show choosen product
 def product(request, id):
     entry = Product.objects.get(title=id)
-    close_button=0
+    close_button = 0
+    current_bid = 0
+    current_bid = (
+        Bid.objects.filter(product_id=entry.auto_increment_id).order_by("id").last()
+    )
+    # Check if post autor is loggin , show button close
     if entry.author == request.user.username:
         close_button = 1
     else:
         close_button = 0
+
     if request.method == "GET":
         newcomment = request.GET.get("newcomment")
         currentuser = request.user.username
-        
+
         cm = Comment.objects.filter(title_id=entry.auto_increment_id)
-        
+
         if newcomment is not None:
             newc = Comment(title_id=entry.auto_increment_id, comment_text=newcomment)
             newc.save()
 
-        return render(
-            request,
-            "auctions/product.html",
-            {
-                "id": entry.auto_increment_id,
-                "title": entry.title,
-                "descr": entry.description,
-                "strbid": entry.startbid,
-                "imgurl": entry.imgurl,
-                "category": entry.category,
-                "active": entry.active,
-                "email": entry.email,
-                "form": commentform,
-                "comment_obj": cm[:5],
-                "close_button": close_button,
-            },
-        )
+        # default product output
+        context = {
+            "id": entry.auto_increment_id,
+            "title": entry.title,
+            "descr": entry.description,
+            "strbid": entry.startbid,
+            "imgurl": entry.imgurl,
+            "category": entry.category,
+            "active": entry.active,
+            "email": entry.email,
+            "form": commentform,
+            "comment_obj": cm[:5],
+            "close_button": close_button,
+        }
+        return render(request, "auctions/product.html", context)
 
+    # check for anny buttons pressed on product page
     if request.method == "POST":
         title = request.POST.get("title")
         updatebid = request.POST.get("updbid")
         pageid = request.POST.get("id")
         entry = Product.objects.get(title=title)
         close_value = request.POST.get("end")
+
+        # Check if close listing button pressed
         if close_value == "close_bid":
-            Product.objects.filter(auto_increment_id=pageid).update(active=False)
-            return index(request)
+            # write winner name to database
+            max_bid_user = (
+                Bid.objects.filter(product_id=entry.auto_increment_id)
+                .order_by("id")
+                .last()
+            )
+            # update listing entry
+            Product.objects.filter(auto_increment_id=pageid).update(
+                active=False, winner=max_bid_user.user
+            )
+            # return to index page
+            return HttpResponseRedirect(reverse(index))
+
+        # if owner dont close listing we check for new bids placed
         else:
 
-            if entry.startbid < int(updatebid):
-                Product.objects.filter(auto_increment_id=pageid).update(startbid=updatebid)
-                return render(
-                    request,
-                    "auctions/product.html",
-                    {
-                        "id": entry.auto_increment_id,
-                        "title": entry.title,
-                        "descr": entry.description,
-                        "strbid": entry.startbid,
-                        "imgurl": entry.imgurl,
-                        "category": entry.category,
-                        "active": entry.active,
-                        "email": entry.email,
-                        "form": commentform,
-                        "close_button": close_button,
-                        "message": "Bid placed",
-                    },
+            if current_bid.bid < int(updatebid):
+                newbid = Bid(
+                    user=request.user.username,
+                    bid=updatebid,
+                    product_id=entry.auto_increment_id,
                 )
-            elif entry.startbid >= int(updatebid):
-                return render(
-                    request,
-                    "auctions/product.html",
-                    {
-                        "id": entry.auto_increment_id,
-                        "title": entry.title,
-                        "descr": entry.description,
-                        "strbid": entry.startbid,
-                        "imgurl": entry.imgurl,
-                        "category": entry.category,
-                        "active": entry.active,
-                        "email": entry.email,
-                        "form": commentform,
-                        "close_button": close_button,
-                        "error": "Bid is lower then current",
-                    },
-                )
+                newbid.save()
+                # Context for return page with sucess "bid placed" message
+                context = {
+                    "id": entry.auto_increment_id,
+                    "title": entry.title,
+                    "descr": entry.description,
+                    "strbid": entry.startbid,
+                    "imgurl": entry.imgurl,
+                    "category": entry.category,
+                    "active": entry.active,
+                    "email": entry.email,
+                    "form": commentform,
+                    "close_button": close_button,
+                    "message": "Bid placed",
+                    "current_bid": current_bid.bid,
+                }
+                return render(request, "auctions/product.html", context)
 
-#Return  categories list
+            elif current_bid.bid >= int(updatebid):
+                # Context for return page with error "bid lower then current" message
+                context = {
+                    "id": entry.auto_increment_id,
+                    "title": entry.title,
+                    "descr": entry.description,
+                    "strbid": entry.startbid,
+                    "imgurl": entry.imgurl,
+                    "category": entry.category,
+                    "active": entry.active,
+                    "email": entry.email,
+                    "form": commentform,
+                    "close_button": close_button,
+                    "error": "Bid is lower then current",
+                    "current_bid": current_bid.bid,
+                }
+                return render(request, "auctions/product.html", context)
+
+
+# Return  categories list
 def categories(request):
     catlist = Category.objects.all()
     return render(request, "auctions/categories.html", {"categories": catlist})
@@ -128,7 +153,7 @@ def watchlist(request):
     pass
 
 
-#Return page for add new listing
+# Return page for add new listing
 def add(request):
     catlist = Category.objects.all()
     if request.method == "POST":
@@ -155,7 +180,14 @@ def add(request):
                 author=author,
             )
             add.save()
-            return index(request)
+
+            just_saved_product = Product.objects.get(title=title)
+            null_current_bid = Bid(
+                product_id=just_saved_product.auto_increment_id, bid=0, user=author
+            )
+            null_current_bid.save()
+            # return to index page
+            return HttpResponseRedirect(reverse(index))
 
     return render(request, "auctions/add.html", {"categories": catlist})
 
