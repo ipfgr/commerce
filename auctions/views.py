@@ -121,7 +121,7 @@ def product(request, id):
                     "form": commentform,
                     "close_button": close_button,
                     "message": "Bid placed",
-                    "current_bid": current_bid.bid,
+                    "current_bid": int(updatebid),
                 }
                 return render(request, "auctions/product.html", context)
 
