@@ -8,6 +8,7 @@ from .models import User
 from .models import Comment
 from .models import Category
 from .models import Bid
+from .models import WatchListForUser
 from datetime import datetime
 from .forms import CommentsForm
 
@@ -148,10 +149,35 @@ def categories(request):
     catlist = Category.objects.all()
     return render(request, "auctions/categories.html", {"categories": catlist})
 
-
+# Return  categories list
 def watchlist(request):
-    pass
+    current_user=request.user.username
+    #if user puss button "Add to Watchlist" we come here
+    if request.method == "POST":
+        watchlist_item = request.POST.get("watchlist")
+        watchlist=WatchListForUser(user=current_user, watchlist=watchlist_item)
+        watchlist.save()
+        return HttpResponseRedirect(reverse(index))
+    
+    if request.method == "GET":
+        #get all items from user watchlist and renderto the page
+        watchlist_items = WatchListForUser.objects.filter(user=current_user)
+        items_w = []
+        for i in watchlist_items:
+            items_w.append(Product.objects.get(title=i.watchlist))
+        return render(request, "auctions/watchlist.html", {
+            "watchlist_items": items_w
+        })
+    
 
+#Display page with autintificated user winnings items
+def my_winnings(request):
+    current_user= request.user.username
+    winning_items = Product.objects.filter(active=False, winner=current_user)
+    return render(request, 'auctions/winnings.html', {
+            "winning_items":winning_items,
+            "current_user":current_user
+        } )
 
 # Return page for add new listing
 def add(request):

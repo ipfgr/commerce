@@ -22,56 +22,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   </head>
-  <body>
-    <nav class="navbar navbar-light" style="background-color: #e3f2fd">
-      <a class="navbar-brand">Auctions</a>
-      <ul class="nav mr-auto">
+  <body id="top">
+    <nav class="navbar " style="background-color: #000000">
+     <a class="navbar-brand ">Auctions</a>
+        {% if user.is_authenticated %} 
+            <ul class="nav mr-right ">
+                <li class="nav-item">
+                    <a class="nav-link {% block winnings_active %}{% endblock %}" href="{% url 'winnings' %}">My Winnings</a>
+                </li>
+         
+            </ul>
+        {% endif%}
+    </nav>
+    <nav class="navbar navbar-light" style="background-color: #232f3e">
+     
+      <ul class="nav mr-auto ">
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+          <a class="nav-link {% block index_active %}{% endblock %}" href="{% url 'index' %}">Active Listings</a>
         </li>
         {%block categories %} {%endblock %}
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'categories' %}">Categoties</a>
+          <a class="nav-link {% block categories_active %}{% endblock %}" href="{% url 'categories' %}">Categoties</a>
         </li>
         {% if user.is_authenticated %}
 
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'watchlist' %}">Watchlist Items</a>
+          <a class="nav-link {% block watchlist_active %}{% endblock %}" href="{% url 'watchlist' %}">Watchlist Items</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'add' %}">Create Listing</a>
+          <a class="nav-link {% block add_active %}{% endblock %}" href="{% url 'add' %}">Create Listing</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+          <a class="nav-link " href="{% url 'logout' %}">Log Out</a>
         </li>
         {% else %}
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'login' %}">Log In</a>
+          <a class="nav-link {% block login_active %}{% endblock %}" href="{% url 'login' %}">Log In</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'register' %}">Register</a>
+          <a class="nav-link {% block register_active %}{% endblock %}" href="{% url 'register' %}">Register</a>
         </li>
         {% endif %}
       </ul>
 
-      <div class="navbar-text">
+      <div class="navbar-text" style="color:#ffffff">
         {% if user.is_authenticated %} Signed in as
         <strong>{{ user.username }}</strong>. {% else %} Not signed in. 
         {% endif%}
       </div>
     </nav>
-    <hr />
-    {% block body %} {% endblock %}
+    
+  <div class="row">
+    
+    <div class="col-12">
+    <br />
+       {% block body %} {% endblock %}
+    </div>
+  </div>
+</div>
+   
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     
   </body>
+  
+  <div class="text-center p-3 text-white" style="background-color: #37475A">
+    <a class="text-white" href="#top">Back to top</a>
+  </div>
+
   <footer>
     <!-- Copyright -->
-  <div class="text-center p-3" style="background-color: #e3f2fd">
+  <div class="text-center p-3 text-white" style="background-color: #232f3e">
     © 2021 Copyright:
-    <a class="text-dark" href="#">Coded by Ipfgr</a>
+    <a class="text-white" href="#">Coded by Ipfgr</a>
   </div>
   <!-- Copyright -->
 </footer>
-  </footer>
 </html>

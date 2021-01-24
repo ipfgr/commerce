@@ -1,16 +1,5 @@
 {% extends "auctions/layout.html" %}
-{% comment %} {%block categories%}
- <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle"  id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Categories
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                {%for c in categories_list %}
-                     <a href="#" class="dropdown-item">{{c.categories}}</a>
-                {%endfor%}
-                </div>
-            </li>
-{%endblock%} {% endcomment %}
+{% block index_active %}nav-active{% endblock %}
 
 {% block body %}
 
@@ -20,16 +9,12 @@
   <div class="row">
     {% if items %} 
         {%for i in items %}
-    
         <div class="col-md-3 col-sm-6">
         <div class="product-grid7">
             <div class="product-image7">
             <a href="product/{{i.title}}">
                 <img class="pic-1" src="{{i.imgurl}}" />
             </a>
-            <ul class="social">
-                <li><a href="" class="fa fa-shopping-bag"></a></li>
-            </ul>
             <span class="product-new-label">New</span>
             </div>
             <div class="product-content">
@@ -52,6 +37,5 @@
     {%endif%}
   </div>
 </div>
-<hr />
 
 {% endblock %}

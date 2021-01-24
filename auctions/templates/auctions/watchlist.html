@@ -1,27 +1,25 @@
-{% extends 'auctions/layout.html' %}
-{% block category_active %}nav-active{% endblock %}
-
+{% extends "auctions/layout.html" %}
+{% block watchlist_active %}nav-active{% endblock %}
 
 {% block body %}
 
 <div class="container">
-  <h2 class="text-center">Sorted by category: {{category_name}}</h2>
+  <h2 class="text-center">Watchlist items</h2>
   <br />
   <div class="row">
-    {% if filtered_products %} 
-        {%for fp in filtered_products %}
-    
+    {% if watchlist_items %} 
+        {%for w in watchlist_items%}
         <div class="col-md-3 col-sm-6">
         <div class="product-grid7">
             <div class="product-image7">
-            <a href={% url "product"%}/{{fp.title}}  >
-                <img class="pic-1" src="{{fp.imgurl}}" />
+            <a href="product/{{w.title}}">
+                <img class="pic-1" src="{{w.imgurl}}" />
             </a>
             
-            <span class="product-new-label">New</span>
             </div>
             <div class="product-content">
-            <h3 class="title"><a href="#">{{fp.title}}</a></h3>
+            <h3 class="title"><a href="product/{{w.title}}">{{w.title}}</a></h3>
+            <h5 class="title"><a href="product/{{w.title}}">{{w.description|slice:":60"}}...</a></h5>
             <ul class="rating">
                 <li class="fa fa-star"></li>
                 <li class="fa fa-star"></li>
@@ -29,12 +27,13 @@
                 <li class="fa fa-star"></li>
                 <li class="fa fa-star"></li>
             </ul>
-            <div class="price">${{fp.startbid}}</div>
+            <div class="price">${{w.startbid}}</div>
+            
             </div>
         </div>
         </div>
         {%endfor%} {% else %}
-    <p>Not have any active listings.</p>
+    <p>Not have any items in your watchlist.</p>
     {%endif%}
   </div>
 </div>

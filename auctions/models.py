@@ -25,7 +25,7 @@ class Product(models.Model):
     title= models.CharField(max_length=64)
     description= models.TextField()
     startbid= models.PositiveIntegerField(null=True, blank=True)
-    imgurl= models.CharField(max_length=200)
+    imgurl= models.URLField(max_length=200, default= "https://www.commonequity.com.au/wp-content/plugins/download-manager/assets/images/img-404.png")
     category= models.ForeignKey(Category, on_delete=models.CASCADE, related_name="ctg", default="None")
     active = models.BooleanField()
     email= models.EmailField(max_length=128,null=True)
@@ -59,8 +59,5 @@ class Bid(models.Model):
 
 class WatchListForUser(models.Model):
     user = models.CharField(max_length=100, default="unknow")
-    watchlist= models.CharField(max_length=100, default="None")
+    watchlist= models.CharField(max_length=100, default="None", unique=True)
 
-
-    def __str__(self):
-        return "Watchlist for user {}".format(self.user)

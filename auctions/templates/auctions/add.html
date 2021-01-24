@@ -1,4 +1,7 @@
-{% extends 'auctions/layout.html' %} {% block body %}
+{% extends 'auctions/layout.html' %}
+{% block add_active %}nav-active{% endblock %}
+{% block body %}
+
 
 <div class="container maincontainer">
 <br>
@@ -31,6 +34,7 @@
         aria-label="Amount (to the nearest dollar)"
         placeholder="Enter start bid (USD)"
         min="1"
+        required
       />
     </div>
     <br />
@@ -41,7 +45,9 @@
         class="form-control"
         name="imgurl"
         placeholder="image url here"
+        pattern="https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)(.jpg|.png|.gif)"
       />
+      <small id="emailHelp" class="form-text text-muted">Add PNG / JPG / GIF image url or leave unfiled.</small>
     </div>
 
     <br />

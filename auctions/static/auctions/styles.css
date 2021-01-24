@@ -1,6 +1,21 @@
 body {
-  padding: 10px;
-  border: 12px solid rgb(227 242 253);
+  padding: 0px;
+  background-color:#EAEDED;
+}
+
+a{
+    color: azure;
+}
+
+.navbar-brand{
+    color: #FFFFFF !important;
+}
+
+.nav-active{
+    color: rgb(39 30 30);
+    border-radius: 10px;
+    background-color: #87c1ff;
+    opacity: 0.8;
 }
 
 .maincontainer {
@@ -46,36 +61,8 @@ body {
   opacity: 1;
   transition: all 0.5s ease-out 0s;
 }
-.product-grid7 .social {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  position: absolute;
-  bottom: 3px;
-  left: -20%;
-  z-index: 1;
-  transition: all 0.5s ease 0s;
-}
-.product-grid7:hover .social {
-  left: 17px;
-}
-.product-grid7 .social li a {
-  color: #fff;
-  background-color: #333;
-  font-size: 16px;
-  line-height: 40px;
-  text-align: center;
-  height: 40px;
-  width: 40px;
-  margin: 15px 0;
-  border-radius: 50%;
-  display: block;
-  transition: all 0.5s ease-in-out;
-}
-.product-grid7 .social li a:hover {
-  color: #fff;
-  background-color: #78e08f;
-}
+
+
 .product-grid7 .product-new-label {
   color: #fff;
   background-color: #333;
