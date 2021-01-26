@@ -61,3 +61,6 @@ class WatchListForUser(models.Model):
     user = models.CharField(max_length=100, default="unknow")
     watchlist= models.CharField(max_length=100, default="None", unique=True)
 
+    def __str__(self):
+        return "User {} add {} to watchlist".format(self.user, self.watchlist)
+

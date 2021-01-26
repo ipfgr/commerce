@@ -37,12 +37,20 @@ def category(request, ident):
 
 # show choosen product
 def product(request, id):
+    id_var=id
     entry = Product.objects.get(title=id)
     close_button = 0
     current_bid = 0
     current_bid = (
         Bid.objects.filter(product_id=entry.auto_increment_id).order_by("id").last()
     )
+    
+    #check if user win auction ?
+    check_win=(Product.objects.filter(active=False, winner=request.user.username, title=id))
+  
+    #check if product already in user watchlist
+    wl = WatchListForUser.objects.filter(user=request.user.username, watchlist=id)
+    
     # Check if post autor is loggin , show button close
     if entry.author == request.user.username:
         close_button = 1
@@ -55,10 +63,13 @@ def product(request, id):
 
         cm = Comment.objects.filter(title_id=entry.auto_increment_id)
 
+        #add new comment on page
         if newcomment is not None:
             newc = Comment(title_id=entry.auto_increment_id, comment_text=newcomment)
             newc.save()
-
+            return HttpResponseRedirect(id)
+        
+      
         # default product output
         context = {
             "id": entry.auto_increment_id,
@@ -72,6 +83,10 @@ def product(request, id):
             "form": commentform,
             "comment_obj": cm[:5],
             "close_button": close_button,
+            "watchlist":wl.exists(),
+            "current_bid": current_bid.bid,
+            "win":check_win.exists()
+            
         }
         return render(request, "auctions/product.html", context)
 
@@ -100,7 +115,6 @@ def product(request, id):
 
         # if owner dont close listing we check for new bids placed
         else:
-
             if current_bid.bid < int(updatebid):
                 newbid = Bid(
                     user=request.user.username,
@@ -122,6 +136,8 @@ def product(request, id):
                     "close_button": close_button,
                     "message": "Bid placed",
                     "current_bid": int(updatebid),
+                    "watchlist":wl.exists(),
+                    "win":check_win.exists()
                 }
                 return render(request, "auctions/product.html", context)
 
@@ -140,6 +156,8 @@ def product(request, id):
                     "close_button": close_button,
                     "error": "Bid is lower then current",
                     "current_bid": current_bid.bid,
+                    "watchlist":wl.exists(),
+                    "win":check_win.exists()
                 }
                 return render(request, "auctions/product.html", context)
 
@@ -152,19 +170,33 @@ def categories(request):
 # Return  categories list
 def watchlist(request):
     current_user=request.user.username
-    #if user puss button "Add to Watchlist" we come here
+    #if user puss button "Add to Watchlist or Remove from Watchlist" we come here
     if request.method == "POST":
-        watchlist_item = request.POST.get("watchlist")
-        watchlist=WatchListForUser(user=current_user, watchlist=watchlist_item)
-        watchlist.save()
-        return HttpResponseRedirect(reverse(index))
+        product_title= request.POST.get("title")
+        watchlist_item_add = request.POST.get("add_watchlist")
+        watchlist_item_rm = request.POST.get("rm_watchlist")
+        try:
+            if len(watchlist_item_add) > 0:
+                watchlist=WatchListForUser(user=current_user, watchlist=watchlist_item_add)
+                watchlist.save()
+                return HttpResponseRedirect("product/"+str(watchlist_item_add))
+        except TypeError:
+            watchlist_item_add="0"  
+
+        if len(watchlist_item_rm):
+            WatchListForUser.objects.filter(user=current_user, watchlist=watchlist_item_rm).delete()
+            return HttpResponseRedirect("product/"+str(watchlist_item_rm))
+
     
     if request.method == "GET":
         #get all items from user watchlist and renderto the page
         watchlist_items = WatchListForUser.objects.filter(user=current_user)
         items_w = []
         for i in watchlist_items:
-            items_w.append(Product.objects.get(title=i.watchlist))
+            try:
+                items_w.append(Product.objects.get(title=i.watchlist))
+            except Product.DoesNotExist:
+                items_w=none
         return render(request, "auctions/watchlist.html", {
             "watchlist_items": items_w
         })

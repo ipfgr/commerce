@@ -12,23 +12,21 @@
         <div class="col-md-3 col-sm-6">
         <div class="product-grid7">
             <div class="product-image7">
-            <a href="product/{{w.title}}">
-                <img class="pic-1" src="{{w.imgurl}}" />
-            </a>
-            
+                <a href="product/{{w.title}}">
+                    <img class="pic-1" src="{{w.imgurl}}" />
+                </a>
             </div>
             <div class="product-content">
-            <h3 class="title"><a href="product/{{w.title}}">{{w.title}}</a></h3>
-            <h5 class="title"><a href="product/{{w.title}}">{{w.description|slice:":60"}}...</a></h5>
-            <ul class="rating">
-                <li class="fa fa-star"></li>
-                <li class="fa fa-star"></li>
-                <li class="fa fa-star"></li>
-                <li class="fa fa-star"></li>
-                <li class="fa fa-star"></li>
-            </ul>
+                <h3 class="title"><a href="product/{{w.title}}">{{w.title}}</a></h3>
+                <h5 class="title"><a href="product/{{w.title}}">{{w.description|slice:":60"}}...</a></h5>
+                <ul class="rating">
+                    <li class="fa fa-star"></li>
+                    <li class="fa fa-star"></li>
+                    <li class="fa fa-star"></li>
+                    <li class="fa fa-star"></li>
+                    <li class="fa fa-star"></li>
+                </ul>
             <div class="price">${{w.startbid}}</div>
-            
             </div>
         </div>
         </div>
@@ -38,5 +36,4 @@
   </div>
 </div>
 <hr />
-
 {% endblock %}

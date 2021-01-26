@@ -22,6 +22,14 @@
                        </div>
             </div>
             <div class="col-md-6 col-md-offset-1 col-sm-12 col-xs-12">
+                {% if win%}<h2 class="name">
+                    <div class="alert alert-warning  fade show" role="alert">
+                        <strong>You are Winner! </strong>Seller agree with your bid ({{current_bid}}$) and you win this auction.
+                            </button>
+                        </div>
+                {%endif%}
+
+                </h2>
                 <h2 class="name">
                     {{title}}
                 </h2>
@@ -58,7 +66,8 @@
                     <div class="col-sm-12 col-md-6 col-lg-6" >
                     <div class="input-group">
     
-        {% if user.is_authenticated%}
+        {% if user.is_authenticated and win < 1%}
+        
         <form action="" method="post">
         <input
             type="number"
@@ -84,16 +93,21 @@
         {%endif%}
         </form>
         {%endif%}
-
         </div>     
         </div>
                     <div class="col-sm-12 col-md-6 col-lg-6">
                         <div class="btn-group pull-right">
                         <form action={% url 'watchlist' %} method="POST">
                             {%csrf_token%}
-                               <button type="submit" name="watchlist" value="{{title}}" class="btn btn-white btn-default"><i class="fa fa-star"></i> Add to wishlist</button>
+                                
+                               {% if watchlist%}
+                               <button type="submit" name="rm_watchlist" value="{{title}}" class="btn btn-white btn-default"><i class="fa fa-star"></i> Remove from wishlist</button>
+                                {%else%}
+                               
+                               <button type="submit" name="add_watchlist" value="{{title}}" class="btn btn-white btn-default"><i class="fa fa-star"></i> Add to wishlist</button>
+
+                                {%endif%}
                         </form>
-                            <button class="btn btn-white btn-default"><i class="fa fa-envelope"></i> Contact Seller</button>
                         </div>
                     </div>
                 </div>
@@ -120,11 +134,10 @@
                     </fieldset>
                 </form>
                 {% endif %}
-                
                 <h3>Last 5 comments</h3>
+                <br />
                 {% comment %} Comments section  {% endcomment %}
                 {%for comment in comment_obj %}
-                
                 <div class="media">
                     <div class="media-body">
                         <p>{{comment.comment_text}}</p>
